@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/.vs
+/src/Motorcycle.UnitTests/bin/Debug/net9.0
+/src/Motorcycle.UnitTests/obj
+/src/Services/Motorcycle/Motorcycle.API/bin/Debug/net9.0
+/src/Services/Motorcycle/Motorcycle.API/obj
+/src/SharedKernel/obj/Debug/net9.0
+/src/SharedKernel/obj
