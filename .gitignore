@@ -9,3 +9,5 @@
 /src/Services/Motorcycle/Motorcycle.API/obj
 /src/SharedKernel/obj/Debug/net9.0
 /src/SharedKernel/obj
+/src/Services/Motorcycle/Motorcycle.API/.vs/Motorcycle.API/v17
+/src/SharedKernel/bin/Debug/net9.0
