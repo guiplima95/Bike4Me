@@ -2,6 +2,7 @@
 using Bike4Me.Application.Abstractions.Caching;
 using Bike4Me.Application.Abstractions.Messaging;
 using Bike4Me.Application.Abstractions.Storage;
+using Bike4Me.Domain.Couriers;
 using Bike4Me.Domain.Motorcycles;
 using Bike4Me.Infrastructure.Database;
 using Bike4Me.Infrastructure.EventBus;
@@ -88,6 +89,7 @@ public static class ServiceCollectionExtensions
     private static void AddRepositories(IServiceCollection services)
     {
         services.AddScoped<IMotorcycleRepository, MotorcycleRepository>();
+        services.AddScoped<ICourierRepository, CourierRepository>();
         services.AddScoped<IMotorcycleReportRepository, MotorcycleReportRepository>();
         services.AddScoped<IModelMotorcycleRepository, ModelMotorcycleRepository>();
     }

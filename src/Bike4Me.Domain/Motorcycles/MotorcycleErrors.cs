@@ -8,10 +8,10 @@ public static class MotorcycleErrors
         "Motorcycles.MotorcycleNotUnique", "A motorcycle with this plate already exists.");
 
     public static readonly Error NotFoundByPlate = Error.NotFound(
-    "Motorcycles.NotFoundByPlate",
-    "The motorcycle with the specified plate was not found");
+        "Motorcycles.NotFoundByPlate",
+        "The motorcycle with the specified plate was not found");
 
     public static readonly Error NotFound = Error.NotFound(
-    "Motorcycles.NotFound",
-    "The motorcycle was not found");
+        "Motorcycles.NotFound",
+        "The motorcycle was not found");
 }

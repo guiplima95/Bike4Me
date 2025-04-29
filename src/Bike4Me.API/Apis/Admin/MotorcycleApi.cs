@@ -14,40 +14,30 @@ public class MotorcycleApi : IEndpoint
     {
         app.MapGet("motorcycles", GetMotorcycles)
             .Produces<List<MotorcycleDto>>(StatusCodes.Status200OK)
-            .WithName("Get all motorcycles")
-            .WithTags(Tags.Motorcycles);
-
-        app.MapGet("motorcycles/{plate}", GetMotorcycle)
-            .Produces<MotorcycleDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .WithName("Get motorcycle by plate")
+            .WithName("GetMotorcycles")
+            .WithDescription("Get motorcycles")
             .WithTags(Tags.Motorcycles);
 
         app.MapPost("motorcycles", CreateMotorcycle)
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status409Conflict)
-            .WithName("Create motorcycle")
+            .WithName("CreateMotorcycle")
+            .WithDescription("Create motorcycle")
             .WithTags(Tags.Motorcycles);
 
         app.MapPut("motorcycles/{id}/plate", UpdateMotorcyclePlate)
            .Produces(StatusCodes.Status204NoContent)
            .Produces(StatusCodes.Status404NotFound)
            .Produces(StatusCodes.Status409Conflict)
-           .WithName("Update motorcycle")
+           .WithName("UpdateMotorcyclePlate")
+           .WithDescription("Update motorcycle")
            .WithTags(Tags.Motorcycles);
     }
 
-    public static async Task<IResult> GetMotorcycles(IMotorcyclesQueries queries)
+    public static async Task<IResult> GetMotorcycles(IMotorcyclesQueries queries, string? plate = null)
     {
-        var result = Result.Success(await queries.GetAllAsync());
-
-        return result.Match(Results.Ok, CustomResults.Problem);
-    }
-
-    public static async Task<IResult> GetMotorcycle(IMotorcyclesQueries queries, string plate)
-    {
-        Result<MotorcycleDto> result = await queries.GetByPlateAsync(plate);
+        var result = Result.Success(await queries.FindAllByPlateAsync(plate));
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }

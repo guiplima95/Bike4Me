@@ -86,7 +86,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
     private static Domain.Motorcycles.Motorcycle CreateDefaultMotorcycle(Guid modelId) =>
         Domain.Motorcycles.Motorcycle.Create(
             Guid.NewGuid(),
-            new Plate("ABC1234"),
+            new Plate("ABC-1234"),
             modelId,
             "Blue");
 

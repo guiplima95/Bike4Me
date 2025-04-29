@@ -5,7 +5,7 @@ using Bike4Me.Application.Abstractions.Storage;
 
 namespace Bike4Me.Infrastructure.Storage;
 
-internal sealed class BlobService(BlobServiceClient blobServiceClient) : IBlobService
+public sealed class BlobService(BlobServiceClient blobServiceClient) : IBlobService
 {
     private const string ContainerName = "files";
 
@@ -20,20 +20,18 @@ internal sealed class BlobService(BlobServiceClient blobServiceClient) : IBlobSe
         return new FileResponse(response.Value.Content.ToStream(), response.Value.Details.ContentType);
     }
 
-    public async Task<Guid> UploadAsync(Stream stream, string contentType, CancellationToken cancellationToken = default)
+    public async Task UploadAsync(Stream stream, string contentType, string fileName, CancellationToken cancellationToken = default)
     {
         BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(ContainerName);
 
-        var fileId = Guid.NewGuid();
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.None, cancellationToken: cancellationToken);
 
-        BlobClient blobClient = containerClient.GetBlobClient(fileId.ToString());
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);
 
         await blobClient.UploadAsync(
             stream,
             new BlobHttpHeaders { ContentType = contentType },
             cancellationToken: cancellationToken);
-
-        return fileId;
     }
 
     public async Task DeleteAsync(Guid fileId, CancellationToken cancellationToken = default)

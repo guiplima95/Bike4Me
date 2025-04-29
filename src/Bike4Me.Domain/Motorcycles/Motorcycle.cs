@@ -9,7 +9,12 @@ public class Motorcycle : Entity
     {
     }
 
-    private Motorcycle(Guid id, Plate plate, Guid modelId, MotorcycleStatus status, string color)
+    private Motorcycle(
+        Guid id,
+        Plate plate,
+        Guid modelId,
+        MotorcycleStatus status,
+        string color)
     {
         Id = id;
         Plate = plate;

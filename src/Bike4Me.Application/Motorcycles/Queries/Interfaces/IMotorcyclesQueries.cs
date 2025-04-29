@@ -5,7 +5,5 @@ namespace Bike4Me.Application.Motorcycles.Queries.Interfaces;
 
 public interface IMotorcyclesQueries
 {
-    Task<Result<List<MotorcycleDto>>> GetAllAsync();
-
-    Task<Result<MotorcycleDto>> GetByPlateAsync(string plate);
+    Task<Result<List<MotorcycleDto>>> FindAllByPlateAsync(string? plate);
 }

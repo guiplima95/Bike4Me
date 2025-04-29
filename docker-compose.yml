@@ -10,6 +10,7 @@ services:
       - bike4me.db
       - bike4me.mongo
       - rabbitmq
+      - bike4me-blob-storage
     ports:
       - "5000:5000"
       - "5001:5001"
@@ -52,3 +53,12 @@ services:
     ports:
       - "5672:5672" 
       - "15672:15672"
+
+  bike4me-blob-storage:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: bike4me-blob-storage
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000"
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./azurite:/data

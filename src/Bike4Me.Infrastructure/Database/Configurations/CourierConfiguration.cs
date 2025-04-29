@@ -40,5 +40,12 @@ public class CourierConfiguration : IEntityTypeConfiguration<Courier>
                     .HasMaxLength(3)
                     .HasColumnName("cnh_category");
             });
+
+        builder.ComplexProperty(
+            c => c.Cnpj,
+            b => b.Property(cnpj => cnpj.Value)
+                    .IsRequired()
+                    .HasMaxLength(14)
+                    .HasColumnName("cnpj"));
     }
 }

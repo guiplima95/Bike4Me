@@ -21,4 +21,9 @@
 	  <ProjectReference Include="..\Bike4Me.Domain\Bike4Me.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Couriers\Events\" />
+	  <Folder Include="Rentals\" />
+	</ItemGroup>
+
 </Project>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Bike4Me.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bike4Me.Infrastructure.Migrations
 {
     [DbContext(typeof(Bike4MeContext))]
-    partial class Bike4MeContextModelSnapshot : ModelSnapshot
+    [Migration("20250429174207_AddCnpjToCourier")]
+    partial class AddCnpjToCourier
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
