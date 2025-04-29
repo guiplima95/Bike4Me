@@ -26,3 +26,8 @@
 /tests/Bike4Me.IntegrationTests/obj
 /tests/Bike4Me.UnitTests/bin/Debug/net9.0
 /tests/Bike4Me.UnitTests/obj
+/.containers/motorcycles-db
+/.vs
+/bin/Debug
+/obj
+/.containers
