@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  bike4me.api:
+    image: ${DOCKER_REGISTRY-}bike4meapi
+    build:
+      context: .
+      dockerfile: src/Bike4Me.API/Dockerfile
+    depends_on: 
+      - bike4me.db
+      - bike4me.mongo
+      - rabbitmq
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  bike4me.db: 
+    image: postgres:latest
+    container_name: bike4me.db
+    environment: 
+      - POSTGRES_DB=bike4me-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/bike4me-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  bike4me.mongo:
+    image: mongo:latest
+    container_name: bike4me.mongo
+    environment:
+      - MONGO_INITDB_DATABASE=bike4me-db
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    volumes:
+      - ./.containers/bike4me-mongo:/data/db
+    ports:
+      - 27017:27017
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672" 
+      - "15672:15672"

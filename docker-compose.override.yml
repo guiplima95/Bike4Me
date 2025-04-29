@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  bike4me.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+
+      - ConnectionStrings__DefaultConnection=Host=bike4me.db;Database=bike4me-db;Username=postgres;Password=postgres
+      - MongoDbSettings__ConnectionString=mongodb://root:password@bike4me.mongo:27017/bike4me-report
+
+      - EventBus__RabbitMQ__Connection=amqp://user:password@rabbitmq:5672
