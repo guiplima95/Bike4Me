@@ -12,7 +12,7 @@ public class RentalConfiguration : IEntityTypeConfiguration<Rental>
 
         builder.HasKey(r => r.Id);
 
-        builder.Property(r => r.MotorcycleId)
+        builder.Property(r => r.BikeId)
             .IsRequired()
             .HasColumnName("motorcycle_id");
 

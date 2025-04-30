@@ -16,6 +16,7 @@ using System.Text.Json;
 using Polly.Retry;
 using System.Text.Json.Serialization.Metadata;
 using Bike4Me.Infrastructure.EventBus.Converters;
+using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 
 namespace Bike4Me.Infrastructure.EventBus;
 

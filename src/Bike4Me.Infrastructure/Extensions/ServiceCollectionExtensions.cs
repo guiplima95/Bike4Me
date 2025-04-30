@@ -1,23 +1,22 @@
 ﻿using Azure.Storage.Blobs;
 using Bike4Me.Application.Abstractions.Caching;
-using Bike4Me.Application.Abstractions.Messaging;
+using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Abstractions.Storage;
+using Bike4Me.Domain.Bikes;
 using Bike4Me.Domain.Couriers;
-using Bike4Me.Domain.Motorcycles;
+using Bike4Me.Infrastructure.Caching;
 using Bike4Me.Infrastructure.Database;
 using Bike4Me.Infrastructure.EventBus;
 using Bike4Me.Infrastructure.EventBus.Interfaces;
 using Bike4Me.Infrastructure.NoSql;
 using Bike4Me.Infrastructure.Repositories;
 using Bike4Me.Infrastructure.Storage;
-using Bike4Me.Infrastructure.Time;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Motorcycle.API.Infrastructure.Caching;
 using RabbitMQ.Client;
 using SharedKernel;
 
@@ -29,7 +28,6 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        AddDateTimeProvider(services);
         AddDbContext(services, configuration);
         AddCache(services, configuration);
         AddHealthChecks(services, configuration);
@@ -39,11 +37,6 @@ public static class ServiceCollectionExtensions
         AddRepositories(services);
 
         return services;
-    }
-
-    private static void AddDateTimeProvider(IServiceCollection services)
-    {
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -88,10 +81,10 @@ public static class ServiceCollectionExtensions
 
     private static void AddRepositories(IServiceCollection services)
     {
-        services.AddScoped<IMotorcycleRepository, MotorcycleRepository>();
+        services.AddScoped<IBikeRepository, BikeRepository>();
         services.AddScoped<ICourierRepository, CourierRepository>();
-        services.AddScoped<IMotorcycleReportRepository, MotorcycleReportRepository>();
-        services.AddScoped<IModelMotorcycleRepository, ModelMotorcycleRepository>();
+        services.AddScoped<IBikeReportRepository, BikeReportRepository>();
+        services.AddScoped<IBikeModelRepository, BikeModelRepository>();
     }
 
     private static void AddRabbitMQ(IServiceCollection services, IConfiguration configuration)
@@ -126,13 +119,13 @@ public static class ServiceCollectionExtensions
             var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
             var database = client.GetDatabase(settings.DatabaseName);
 
-            return database.GetCollection<MotorcycleReport>("motorcycles");
+            return database.GetCollection<BikeReport>("bikes");
         });
 
         services.AddScoped(sp =>
         {
             var database = sp.GetRequiredService<IMongoDatabase>();
-            return database.GetCollection<Domain.Motorcycles.Motorcycle>("motorcycles");
+            return database.GetCollection<Bike>("bikes");
         });
     }
 }

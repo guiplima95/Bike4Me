@@ -1,4 +1,4 @@
-﻿using Bike4Me.Domain.Motorcycles;
+﻿using Bike4Me.Domain.Bikes;
 using SharedKernel;
 
 namespace Bike4Me.Domain.Rentals;
@@ -12,14 +12,14 @@ public class Rental : Entity
 
     private Rental(
         Guid id,
-        Guid motorcycleId,
+        Guid bikeId,
         Guid courierId,
         RentalPlan rentalPlan,
         DateTime rentalStartDate,
         DateTime expectedReturnDate)
     {
         Id = id;
-        MotorcycleId = motorcycleId;
+        BikeId = bikeId;
         CourierId = courierId;
         RentalPlan = rentalPlan;
         RentalStartDate = rentalStartDate;
@@ -30,7 +30,7 @@ public class Rental : Entity
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public Guid MotorcycleId { get; private set; }
+    public Guid BikeId { get; private set; }
     public Guid CourierId { get; private set; }
     public RentalPlan RentalPlan { get; private set; } = null!;
     public DateTime RentalStartDate { get; private set; }
@@ -77,7 +77,7 @@ public class Rental : Entity
         return Result.Success();
     }
 
-    public Result ReturnMotorcycle(DateTime actualReturnDate)
+    public Result ReturnBike(DateTime actualReturnDate)
     {
         if (actualReturnDate < RentalStartDate)
         {
@@ -88,6 +88,19 @@ public class Rental : Entity
         Status = RentalStatus.Completed;
         UpdatedAt = DateTime.UtcNow;
         TotalPrice = CalculateTotalPrice();
+
+        return Result.Success();
+    }
+
+    public Result UpdateRentalEndDate(DateTime newRentalEndDate)
+    {
+        if (newRentalEndDate < RentalStartDate)
+        {
+            return Result.Failure(RentalErrors.ExpectedReturnDateBeforeStart);
+        }
+
+        RentalEndDate = newRentalEndDate;
+        UpdatedAt = DateTime.UtcNow;
 
         return Result.Success();
     }

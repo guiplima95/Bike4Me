@@ -1,12 +1,12 @@
-﻿using Bike4Me.Domain.Motorcycles;
+﻿using Bike4Me.Domain.Bikes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bike4Me.Infrastructure.Database.Configurations;
 
-public class MotorcycleModelConfiguration : IEntityTypeConfiguration<MotorcycleModel>
+public class MotorcycleModelConfiguration : IEntityTypeConfiguration<BikeModel>
 {
-    public void Configure(EntityTypeBuilder<MotorcycleModel> builder)
+    public void Configure(EntityTypeBuilder<BikeModel> builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
 

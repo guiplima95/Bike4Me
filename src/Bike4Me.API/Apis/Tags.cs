@@ -2,6 +2,7 @@
 
 public static class Tags
 {
-    public const string Motorcycles = "Motorcycles";
+    public const string Bikes = "Bikes";
     public const string Couries = "Couries";
+    public const string Rentals = "Rentals";
 }

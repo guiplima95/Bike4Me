@@ -1,10 +1,9 @@
 ﻿using Bike4Me.Application.Abstractions.Caching;
-using Bike4Me.Infrastructure.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Buffers;
 using System.Text.Json;
 
-namespace Motorcycle.API.Infrastructure.Caching;
+namespace Bike4Me.Infrastructure.Caching;
 
 public class CacheService(IDistributedCache cache) : ICacheService
 {

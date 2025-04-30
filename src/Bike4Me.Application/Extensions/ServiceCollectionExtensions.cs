@@ -1,9 +1,13 @@
-﻿using Bike4Me.Application.Motorcycles.Queries.Interfaces;
-using Bike4Me.Application.Motorcycles.Queries;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+﻿using Bike4Me.Application.Abstractions.Behaviors;
+using Bike4Me.Application.Abstractions.Messaging.Interfaces;
+using Bike4Me.Application.Abstractions.Messaging;
+using Bike4Me.Application.Bikes.Queries;
+using Bike4Me.Application.Bikes.Queries.Interfaces;
 using FluentValidation;
-using Bike4Me.Application.Abstractions.Behaviors;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Bike4Me.Application.Rentals.Queries.Interfaces;
+using Bike4Me.Application.Rentals.Queries;
 
 namespace Bike4Me.Application.Extensions;
 
@@ -17,6 +21,8 @@ public static class ServiceCollectionExtensions
             config.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
         });
 
+        services.AddTransient<IMediatorHandler, MediatorHandler>();
+
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly, includeInternalTypes: true);
 
         string connectionString = configuration["ConnectionStrings:DefaultConnection"] ??
@@ -24,6 +30,7 @@ public static class ServiceCollectionExtensions
 
         return services
             .AddHttpContextAccessor()
-            .AddScoped<IMotorcyclesQueries>(_ => new MotorcyclesQueries(connectionString));
+            .AddScoped<IBikesQueries>(_ => new BikesQueries(connectionString))
+            .AddScoped<IRentalsQuery>(_ => new RentalsQuery(connectionString));
     }
 }

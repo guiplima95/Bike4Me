@@ -1,4 +1,4 @@
-﻿using Bike4Me.Application.Abstractions.Messaging;
+﻿using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 
 namespace Bike4Me.API.Extensions;
 

@@ -1,8 +1,10 @@
 ﻿using Bike4Me.API.Extensions;
 using Bike4Me.API.Infrastructure;
+using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Couriers.Commands;
 using Bike4Me.Application.Couriers.Dtos;
 using MediatR;
+using SharedKernel;
 
 namespace Bike4Me.API.Apis.Public;
 
@@ -12,14 +14,14 @@ public class CourierApi : IEndpoint
     {
         app.MapPost("/couriers", CreateCourier)
             .WithName("CreateCourier")
-            .WithDescription("Create courier")
+            .WithDescription("Create a courier")
             .WithTags(Tags.Couries)
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
 
         app.MapPost("/couriers/{id}/cnh", ImportCourierCnh)
             .WithName("ImportCourierCnh")
-            .WithDescription("Import courier CNH ")
+            .WithDescription("Send a image CNH from courier")
             .WithTags(Tags.Couries)
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
@@ -27,10 +29,9 @@ public class CourierApi : IEndpoint
 
     private static async Task<IResult> CreateCourier(
         CreateCourierCommand command,
-        IMediator mediator,
-        CancellationToken cancellationToken)
+        IMediatorHandler mediator)
     {
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.SendCommand(command);
 
         return result.Match(
             id =>
@@ -43,10 +44,12 @@ public class CourierApi : IEndpoint
     private static async Task<IResult> ImportCourierCnh(
         Guid id,
         ImportCourierCnhRequest request,
-        IMediator mediator,
-        CancellationToken cancellationToken)
+        IMediatorHandler mediator)
     {
-        var result = await mediator.Send(new ImportCourierCnhCommand(id, request.ImagemCnh), cancellationToken);
+        var result = await mediator.SendCommand(
+            new ImportCourierCnhCommand(id, request.ImagemCnh));
+
+        var location = $"/couriers/{result.Value}";
 
         return result.Match(
             id =>

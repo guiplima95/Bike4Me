@@ -22,8 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Couriers\Events\" />
-	  <Folder Include="Rentals\" />
+	  <Folder Include="Rentals\Dtos\" />
 	</ItemGroup>
 
 </Project>

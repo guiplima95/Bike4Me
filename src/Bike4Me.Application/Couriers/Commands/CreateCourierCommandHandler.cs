@@ -1,12 +1,14 @@
-﻿using Bike4Me.Domain.Couriers;
+﻿using Bike4Me.Application.Abstractions.Messaging.Interfaces;
+using Bike4Me.Domain.Couriers;
 using Bike4Me.Domain.Users;
 using MediatR;
 using SharedKernel;
 
 namespace Bike4Me.Application.Couriers.Commands;
 
-public class CreateCourierCommandHandler(ICourierRepository courierRepository, IMediator mediator)
-    : IRequestHandler<CreateCourierCommand, Result<Guid>>
+public class CreateCourierCommandHandler(
+    ICourierRepository courierRepository,
+    IMediatorHandler mediator) : IRequestHandler<CreateCourierCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateCourierCommand request, CancellationToken cancellationToken)
     {
@@ -32,13 +34,7 @@ public class CreateCourierCommandHandler(ICourierRepository courierRepository, I
             return Result.Failure<Guid>(CourierErrors.DuplicateCnpj);
         }
 
-        var importFileResult = await mediator.Send(
-            new ImportCourierCnhCommand(courierId, request.ImagemCnh), cancellationToken);
-
-        if (importFileResult.IsFailure)
-        {
-            return Result.Failure<Guid>(importFileResult.Error);
-        }
+        await mediator.PublishCommand(new ImportCourierCnhCommand(courierId, request.ImagemCnh));
 
         Courier courier = Courier.Create(courierId, emailResult.Value, name, cnhResult.Value, cnpj);
 

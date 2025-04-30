@@ -1,5 +1,10 @@
-﻿using MediatR;
+﻿using Bike4Me.Application.Abstractions.Messaging;
 using SharedKernel;
 
 namespace Bike4Me.Application.Couriers.Commands;
-public sealed record ImportCourierCnhCommand(Guid CourierId, string ImagemCnh) : IRequest<Result<Guid>>;
+
+public sealed class ImportCourierCnhCommand(Guid courierId, string imagemCnh) : Command<Result<Guid>>
+{
+    public Guid CourierId => courierId;
+    public string ImagemCnh => imagemCnh;
+}

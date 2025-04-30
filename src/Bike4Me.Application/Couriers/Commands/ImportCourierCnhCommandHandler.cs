@@ -1,4 +1,5 @@
 ﻿using Bike4Me.Application.Abstractions.Storage;
+using Bike4Me.Application.Extensions;
 using Bike4Me.Domain.Couriers;
 using MediatR;
 using SharedKernel;
@@ -20,9 +21,16 @@ public sealed class ImportCourierCnhCommandHandler(IBlobService blobService) : I
             return Result.Failure<Guid>(CnhErrors.InvalidImageBase64);
         }
 
+        if (!imageBytes.IsValidCnhImageFormat())
+        {
+            return Result.Failure<Guid>(CnhErrors.InvalidImageFormat);
+        }
+
+        string contentType = imageBytes.IsPng() ? ContentTypes.Png : ContentTypes.Bmp;
+
         using var imageStream = new MemoryStream(imageBytes);
 
-        await blobService.UploadAsync(imageStream, "image/jpeg", request.CourierId.ToString(), cancellationToken);
+        await blobService.UploadAsync(imageStream, contentType, request.CourierId.ToString(), cancellationToken);
 
         return Result.Success(request.CourierId);
     }

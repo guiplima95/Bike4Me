@@ -9,20 +9,23 @@ public class User : Entity
     {
     }
 
-    private User(Guid id, Email email, Name name)
+    private User(Guid id, Email email, Name name, UserRole role)
     {
         Id = id;
         Email = email;
         Name = name;
+        Role = role;
     }
 
     public Email Email { get; private set; } = null!;
 
     public Name Name { get; private set; } = null!;
 
-    public static User Create(Email email, Name name)
+    public UserRole Role { get; private set; }
+
+    public static User Create(Email email, Name name, UserRole role)
     {
-        var user = new User(Guid.NewGuid(), email, name);
+        var user = new User(Guid.NewGuid(), email, name, role);
 
         return user;
     }

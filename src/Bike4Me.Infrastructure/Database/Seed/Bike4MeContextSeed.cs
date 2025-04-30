@@ -1,4 +1,4 @@
-﻿using Bike4Me.Domain.Motorcycles;
+﻿using Bike4Me.Domain.Bikes;
 using Medallion.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,34 +59,34 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        if (await context.Motorcycles.AnyAsync(c => c.ModelId == _defaultModelId, cancellationToken))
+        if (await context.Bikes.AnyAsync(c => c.ModelId == _defaultModelId, cancellationToken))
         {
-            logger.LogInformation("Default motorcycle already exists");
+            logger.LogInformation("Default bike already exists");
             return;
         }
 
         var model = CreateDefaultMotorcycleModel();
-        var motorcycle = CreateDefaultMotorcycle(model.Id);
+        var bike = CreateDefaultMotorcycle(model.Id);
 
-        await context.MotorcycleModels.AddAsync(model, cancellationToken);
-        await context.Motorcycles.AddAsync(motorcycle, cancellationToken);
+        await context.BikeModels.AddAsync(model, cancellationToken);
+        await context.Bikes.AddAsync(bike, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("Successfully seeded default motorcycle");
+        logger.LogInformation("Successfully seeded default bike");
     }
 
-    private static MotorcycleModel CreateDefaultMotorcycleModel() =>
-        MotorcycleModel.Create(
+    private static BikeModel CreateDefaultMotorcycleModel() =>
+        BikeModel.Create(
             _defaultModelId,
             new Name("CB 300F Twister Default Model"),
             new Manufacturer("Honda Default"),
             new Year(2025),
             "293,5 cm³ Capacity Default");
 
-    private static Domain.Motorcycles.Motorcycle CreateDefaultMotorcycle(Guid modelId) =>
-        Domain.Motorcycles.Motorcycle.Create(
+    private static Bike CreateDefaultMotorcycle(Guid modelId) =>
+        Bike.Create(
             Guid.NewGuid(),
-            new Plate("ABC-1234"),
+            new LicensePlate("ABC-1234"),
             modelId,
             "Blue");
 
