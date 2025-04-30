@@ -26,7 +26,7 @@ public class AccountApi : IEndpoint
             .WithTags(Tags.Accounts);
 
         app.MapPut("/accounts/{id}/role", UpdateUserRole)
-            .RequireAuthorization()
+            .RequireAuthorization(IdentityRoles.Admin)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)

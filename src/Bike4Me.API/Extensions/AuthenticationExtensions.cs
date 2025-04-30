@@ -9,37 +9,34 @@ namespace Bike4Me.API.Extensions;
 
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
+        JwtSettings jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>()!;
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer();
-
-        services.Configure<JwtBearerOptions>(options =>
-        {
-            var jwtSettings = services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettings>>().Value;
-            var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
-
-            options.TokenValidationParameters = new TokenValidationParameters
+            .AddJwtBearer(options =>
             {
-                ValidateIssuer = true,
-                ValidIssuer = jwtSettings.Issuer,
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtSettings.Issuer,
 
-                ValidateAudience = true,
-                ValidAudience = jwtSettings.Audience,
+                    ValidateAudience = true,
+                    ValidAudience = jwtSettings.Audience,
 
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
 
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
 
-                RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            };
-        });
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                };
+            });
 
         services.AddAuthorizationBuilder()
-            .AddPolicy("Admin", policy => policy.RequireRole(IdentityRoles.Admin))
-            .AddPolicy("Client", policy => policy.RequireRole(IdentityRoles.Client));
+            .AddPolicy("Admin", policy => policy.RequireRole("Admin"))
+            .AddPolicy("Client", policy => policy.RequireRole("Client"));
 
         return services;
     }
