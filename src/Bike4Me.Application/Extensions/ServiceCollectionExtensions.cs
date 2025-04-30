@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Bike4Me.Application.Rentals.Queries.Interfaces;
 using Bike4Me.Application.Rentals.Queries;
+using Bike4Me.Application.Abstractions.Security;
+using Bike4Me.Domain.Users;
 
 namespace Bike4Me.Application.Extensions;
 
@@ -28,9 +30,11 @@ public static class ServiceCollectionExtensions
         string connectionString = configuration["ConnectionStrings:DefaultConnection"] ??
             throw new InvalidOperationException("Could not found sql server connection string");
 
-        return services
+        services
             .AddHttpContextAccessor()
             .AddScoped<IBikesQueries>(_ => new BikesQueries(connectionString))
             .AddScoped<IRentalsQuery>(_ => new RentalsQuery(connectionString));
+
+        return services;
     }
 }

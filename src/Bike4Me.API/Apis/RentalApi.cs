@@ -4,6 +4,7 @@ using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Rentals.Commands;
 using Bike4Me.Application.Rentals.Dtos;
 using Bike4Me.Application.Rentals.Queries.Interfaces;
+using Bike4Me.Domain.Users;
 
 namespace Bike4Me.API.Apis.Public;
 
@@ -12,6 +13,7 @@ public class RentalApi : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("/rentals", CreateRental)
+            .RequireAuthorization(IdentityRoles.Client)
             .WithName("CreateRental")
             .WithDescription("Rent a bike")
             .WithTags("Rentals")
@@ -19,6 +21,7 @@ public class RentalApi : IEndpoint
             .Produces(StatusCodes.Status400BadRequest);
 
         app.MapGet("/rentals/{id}", FindRentalById)
+            .RequireAuthorization(IdentityRoles.Client)
             .WithName("FindRentalById")
             .WithDescription("Search rental by id")
             .WithTags(Tags.Rentals)
@@ -26,6 +29,7 @@ public class RentalApi : IEndpoint
             .Produces(StatusCodes.Status404NotFound);
 
         app.MapPut("/rentals/{id}/return", ReturnRental)
+            .RequireAuthorization(IdentityRoles.Client)
             .WithName("ReturnRental")
             .WithDescription("Inform return date and calculate total price")
             .WithTags("Rentals")

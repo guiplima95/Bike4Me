@@ -18,6 +18,8 @@ public class Courier : Entity
         Name = name;
         Cnh = cnh;
         Cnpj = cnpj;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public Email Email { get; private set; } = null!;

@@ -1,15 +1,19 @@
 ﻿using Azure.Storage.Blobs;
 using Bike4Me.Application.Abstractions.Caching;
 using Bike4Me.Application.Abstractions.Messaging.Interfaces;
+using Bike4Me.Application.Abstractions.Security;
 using Bike4Me.Application.Abstractions.Storage;
 using Bike4Me.Domain.Bikes;
 using Bike4Me.Domain.Couriers;
+using Bike4Me.Domain.Rentals;
+using Bike4Me.Domain.Users;
 using Bike4Me.Infrastructure.Caching;
 using Bike4Me.Infrastructure.Database;
 using Bike4Me.Infrastructure.EventBus;
 using Bike4Me.Infrastructure.EventBus.Interfaces;
 using Bike4Me.Infrastructure.NoSql;
 using Bike4Me.Infrastructure.Repositories;
+using Bike4Me.Infrastructure.Security;
 using Bike4Me.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +38,7 @@ public static class ServiceCollectionExtensions
         AddBlobStorage(services, configuration);
         AddRabbitMQ(services, configuration);
         AddMongoDb(services, configuration);
+        AddSecurity(services, configuration);
         AddRepositories(services);
 
         return services;
@@ -60,6 +65,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ICacheService, CacheService>();
     }
 
+    private static void AddSecurity(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher>();
+        services.AddScoped<ITokenService, TokenService>();
+    }
+
     private static void AddHealthChecks(IServiceCollection services, IConfiguration configuration)
     {
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -81,10 +92,13 @@ public static class ServiceCollectionExtensions
 
     private static void AddRepositories(IServiceCollection services)
     {
-        services.AddScoped<IBikeRepository, BikeRepository>();
-        services.AddScoped<ICourierRepository, CourierRepository>();
-        services.AddScoped<IBikeReportRepository, BikeReportRepository>();
-        services.AddScoped<IBikeModelRepository, BikeModelRepository>();
+        services.AddScoped<IBikeRepository, BikeRepository>()
+                .AddScoped<IBikeModelRepository, BikeModelRepository>()
+                .AddScoped<ICourierRepository, CourierRepository>()
+                .AddScoped<IBikeReportRepository, BikeReportRepository>()
+                .AddScoped<IBikeModelRepository, BikeModelRepository>()
+                .AddScoped<IRentalRepository, RentalRepository>()
+                .AddScoped<IUserRepository, UserRepository>();
     }
 
     private static void AddRabbitMQ(IServiceCollection services, IConfiguration configuration)

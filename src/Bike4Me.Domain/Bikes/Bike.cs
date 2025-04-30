@@ -21,6 +21,8 @@ public class Bike : Entity
         ModelId = modelId;
         Status = status;
         Color = color;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public LicensePlate Plate { get; set; } = null!;
@@ -45,6 +47,7 @@ public class Bike : Entity
     public void UpdatePlate(LicensePlate plate)
     {
         Plate = plate;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void MarkAsRented() => Status = BikeStatus.Rented;

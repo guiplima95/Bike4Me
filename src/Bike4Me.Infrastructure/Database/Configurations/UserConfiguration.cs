@@ -12,6 +12,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(u => u.Id);
 
+        builder.Property(u => u.Role)
+               .IsRequired()
+               .HasDefaultValue(UserRole.Client);
+
+        builder.Property(u => u.PasswordHash)
+               .IsRequired();
+
         builder.ComplexProperty(
             u => u.Name,
             b => b.Property(n => n.Value)

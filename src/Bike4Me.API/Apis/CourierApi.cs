@@ -3,8 +3,7 @@ using Bike4Me.API.Infrastructure;
 using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Couriers.Commands;
 using Bike4Me.Application.Couriers.Dtos;
-using MediatR;
-using SharedKernel;
+using Bike4Me.Domain.Users;
 
 namespace Bike4Me.API.Apis.Public;
 
@@ -13,6 +12,7 @@ public class CourierApi : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("/couriers", CreateCourier)
+            .RequireAuthorization(IdentityRoles.Client)
             .WithName("CreateCourier")
             .WithDescription("Create a courier")
             .WithTags(Tags.Couries)
@@ -20,6 +20,7 @@ public class CourierApi : IEndpoint
             .Produces(StatusCodes.Status400BadRequest);
 
         app.MapPost("/couriers/{id}/cnh", ImportCourierCnh)
+            .RequireAuthorization(IdentityRoles.Client)
             .WithName("ImportCourierCnh")
             .WithDescription("Send a image CNH from courier")
             .WithTags(Tags.Couries)

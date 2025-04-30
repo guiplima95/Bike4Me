@@ -7,16 +7,16 @@ using SharedKernel;
 namespace Bike4Me.Application.Couriers.Commands;
 
 public class CreateCourierCommandHandler(
+    IUserRepository userRepository,
     ICourierRepository courierRepository,
     IMediatorHandler mediator) : IRequestHandler<CreateCourierCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreateCourierCommand request, CancellationToken cancellationToken)
     {
-        Name name = new(request.Name);
-        var emailResult = Email.Create(request.Email);
-        if (emailResult.IsFailure)
+        var user = await userRepository.GetByEmailAsync(request.Email);
+        if (user is null)
         {
-            return Result.Failure<Guid>(emailResult.Error);
+            return Result.Failure<Guid>(UserErrors.UserNotFound);
         }
 
         var cnhResult = Cnh.Create(request.CnhNumber, request.CnhType);
@@ -36,7 +36,7 @@ public class CreateCourierCommandHandler(
 
         await mediator.PublishCommand(new ImportCourierCnhCommand(courierId, request.ImagemCnh));
 
-        Courier courier = Courier.Create(courierId, emailResult.Value, name, cnhResult.Value, cnpj);
+        Courier courier = Courier.Create(courierId, user.Email, user.Name, cnhResult.Value, cnpj);
 
         await courierRepository.AddAsync(courier);
 

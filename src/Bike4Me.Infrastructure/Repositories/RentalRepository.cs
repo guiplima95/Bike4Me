@@ -1,5 +1,21 @@
-﻿namespace Bike4Me.Infrastructure.Repositories;
+﻿using Bike4Me.Domain.Rentals;
 
-public sealed class RentalRepository
+namespace Bike4Me.Infrastructure.Repositories;
+
+public sealed class RentalRepository : IRentalRepository
 {
+    public Task AddAsync(Rental rental)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Rental> GetAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(Rental rental)
+    {
+        throw new NotImplementedException();
+    }
 }
