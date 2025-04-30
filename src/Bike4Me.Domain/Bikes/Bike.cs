@@ -59,7 +59,7 @@ public class Bike : Entity
         return new BikeReport
         {
             Id = id.ToString(),
-            Plate = plate,
+            LicensePlate = plate,
             ModelName = modelName,
             Year = year
         };

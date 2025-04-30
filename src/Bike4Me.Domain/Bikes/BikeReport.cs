@@ -8,8 +8,8 @@ public class BikeReport
     [BsonId]
     public string? Id { get; set; }
 
-    [BsonElement("plate")]
-    public string Plate { get; set; } = string.Empty;
+    [BsonElement("licensePlate")]
+    public string LicensePlate { get; set; } = string.Empty;
 
     [BsonElement("modelName")]
     public string ModelName { get; set; } = string.Empty;

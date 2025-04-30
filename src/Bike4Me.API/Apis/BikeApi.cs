@@ -5,7 +5,6 @@ using Bike4Me.Application.Bikes.Commands;
 using Bike4Me.Application.Bikes.Dtos;
 using Bike4Me.Application.Bikes.Queries.Interfaces;
 using Bike4Me.Domain.Users;
-using Microsoft.AspNetCore.Identity;
 using SharedKernel;
 
 namespace Bike4Me.API.Apis;
@@ -21,7 +20,7 @@ public class BikeApi : IEndpoint
             .WithDescription("Search for existing bikes")
             .WithTags(Tags.Bikes);
 
-        app.MapPost("bikes", UpdatePlate)
+        app.MapPost("bikes", CreateBike)
             .RequireAuthorization(IdentityRoles.Admin)
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)

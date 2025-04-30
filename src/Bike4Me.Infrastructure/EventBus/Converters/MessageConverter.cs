@@ -24,7 +24,7 @@ public class MessageConverter(Assembly? assemblyToScan = null) : JsonConverter<M
         var messageType = _assemblyToScan.GetTypes()
             .FirstOrDefault(t => t.Name.Equals(messageTypeName, StringComparison.OrdinalIgnoreCase)
                               && typeof(Message).IsAssignableFrom(t)
-                              && !t.IsAbstract) ?? throw new NotSupportedException($"Tipo de mensagem desconhecido: {messageTypeName}");
+                              && !t.IsAbstract) ?? throw new NotSupportedException($"Unknow message: {messageTypeName}");
 
         var message = (Message?)JsonSerializer.Deserialize(root.GetRawText(), messageType, options);
 

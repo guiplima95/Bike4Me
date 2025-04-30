@@ -2,8 +2,8 @@
 
 namespace Bike4Me.Application.Bikes.Events;
 
-public sealed class BikePlateUpdatedEvent(Guid motorcycleId, string plate) : Event
+public sealed class BikePlateUpdatedEvent(Guid bikeId, string licensePlate) : Event
 {
-    public Guid MotorcycleId => motorcycleId;
-    public string Plate => plate;
+    public Guid BikeId => bikeId;
+    public string LicensePlate => licensePlate;
 }

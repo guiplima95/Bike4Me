@@ -8,13 +8,13 @@ public sealed class BikePlateUpdatedEventHandler(
 {
     public async Task Handle(BikePlateUpdatedEvent notification, CancellationToken cancellationToken)
     {
-        var report = await reportRepository.GetByIdAsync(notification.MotorcycleId);
+        var report = await reportRepository.GetByIdAsync(notification.BikeId.ToString());
         if (report is null)
         {
             return;
         }
 
-        report.Plate = notification.Plate;
+        report.LicensePlate = notification.LicensePlate;
 
         await reportRepository.UpsertAsync(report);
     }

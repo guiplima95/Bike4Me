@@ -4,11 +4,7 @@ public interface IBikeReportRepository
 {
     Task UpsertAsync(BikeReport bike);
 
-    Task<BikeReport?> GetByIdAsync(Guid id);
+    Task DeleteAsync(string id);
 
-    Task<BikeReport?> GetByPlateAsync(string plate);
-
-    Task<IReadOnlyList<BikeReport>> GetAllAsync();
-
-    Task DeleteAsync(Guid id);
+    Task<BikeReport?> GetByIdAsync(string id);
 }

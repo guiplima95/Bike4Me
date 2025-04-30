@@ -8,6 +8,6 @@ public sealed class BikeDeletedEventHandler(IBikeReportRepository motorcycleRepo
 {
     public async Task Handle(BikeDeletedEvent notification, CancellationToken cancellationToken)
     {
-        await motorcycleReportRepository.DeleteAsync(notification.Id);
+        await motorcycleReportRepository.DeleteAsync(notification.Id.ToString());
     }
 }

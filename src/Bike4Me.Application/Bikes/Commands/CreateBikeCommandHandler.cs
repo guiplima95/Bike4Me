@@ -38,10 +38,10 @@ public sealed class CreateBikeCommandHandler(
 
         await bikeRepository.AddAsync(bike);
 
-        BikeReport motorcycleReport = Bike.Build(
+        BikeReport bikeReport = Bike.Build(
             bike.Id, bike.Plate.Value, model.Name.Value, model.Year.Value);
 
-        await mediator.PublishEvent(new BikeCreatedEvent(motorcycleReport));
+        await mediator.PublishEvent(new BikeCreatedEvent(bikeReport));
 
         return Result.Success(bike.Id);
     }
