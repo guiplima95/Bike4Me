@@ -96,3 +96,8 @@ public static class Delete
 {
     public static string Bike(Guid id) => $"api/v1/bikes/{id}";
 }
+
+public static class Put
+{
+    public static string BikePlate(Guid id) => $"api/v1/bikes/{id}/plate";
+}

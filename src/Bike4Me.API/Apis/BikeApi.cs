@@ -79,10 +79,11 @@ public class BikeApi : IEndpoint
 
     public static async Task<IResult> UpdatePlate(
         Guid id,
-        string plate,
+        BikeLicensePlateRequest request,
         IMediatorHandler mediator)
     {
-        var result = await mediator.SendCommand(new UpdateBikePlateCommand(id, plate));
+        var result = await mediator.SendCommand(
+            new UpdateBikePlateCommand(id, request.LicensePlate));
 
         return result.Match(Results.NoContent, CustomResults.Problem);
     }

@@ -7,27 +7,27 @@ using SharedKernel;
 namespace Bike4Me.Application.Bikes.Commands;
 
 public sealed class UpdateBikePlateCommandHandler(
-    IBikeRepository motorcycleRepository,
+    IBikeRepository bikeRepository,
     IMediatorHandler mediator) : IRequestHandler<UpdateBikePlateCommand, Result>
 {
     public async Task<Result> Handle(UpdateBikePlateCommand request, CancellationToken cancellationToken)
     {
-        if (await motorcycleRepository.AnyExistsAsync(request.Plate))
+        if (await bikeRepository.AnyExistsAsync(request.LicensePlate))
         {
             return Result.Failure(BikeErrors.DuplicatePlate);
         }
 
-        Bike? bike = await motorcycleRepository.GetAsync(request.Id);
+        Bike? bike = await bikeRepository.GetAsync(request.Id);
         if (bike is null)
         {
             return Result.Failure(BikeErrors.NotFound);
         }
 
-        LicensePlate plate = new(request.Plate);
+        LicensePlate plate = new(request.LicensePlate);
 
         bike.UpdatePlate(plate);
 
-        await motorcycleRepository.UpdateAsync(bike);
+        await bikeRepository.UpdateAsync(bike);
 
         await mediator.PublishEvent(new BikePlateUpdatedEvent(bike.Id, bike.Plate.Value));
 

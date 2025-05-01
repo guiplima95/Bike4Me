@@ -5,7 +5,7 @@ namespace Bike4Me.Application.Bikes.Commands;
 
 public sealed class UpdateBikePlateCommandValidator : AbstractValidator<UpdateBikePlateCommand>
 {
-    private static readonly Regex PlateRegex = new(@"^[A-Z]{3}-\d{4}$", RegexOptions.Compiled);
+    private static readonly Regex PlateRegex = new(@"^([A-Z]{3}-\d{4}|[A-Z]{3}\d[A-Z]\d{2})$", RegexOptions.Compiled);
 
     public UpdateBikePlateCommandValidator()
     {
@@ -13,10 +13,10 @@ public sealed class UpdateBikePlateCommandValidator : AbstractValidator<UpdateBi
             .NotEmpty()
             .WithErrorCode("UpdateMotorcyclePlate.MissingMotorcycleId");
 
-        RuleFor(c => c.Plate)
+        RuleFor(c => c.LicensePlate)
             .NotEmpty()
             .WithMessage("LicensePlate is required.")
-            .Matches(PlateRegex).WithMessage("LicensePlate must be in the format ABC-1234.")
+            .Matches(PlateRegex).WithMessage("LicensePlate must follow the old format (ABC-1234) or Mercosul format (ABC1D23).").Matches(PlateRegex).WithMessage("LicensePlate must follow the old format (ABC-1234) or Mercosul format (ABC1D23).")
             .MaximumLength(8)
             .WithErrorCode("UpdateMotorcyclePlate.InvalidPlateLength");
     }
