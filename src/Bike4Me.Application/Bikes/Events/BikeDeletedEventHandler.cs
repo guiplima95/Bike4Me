@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Bike4Me.Application.Bikes.Events;
 
-public sealed class BikeDeletedEventHandler(IBikeReportRepository motorcycleReportRepository)
+public sealed class BikeDeletedEventHandler(IBikeReportRepository bikeReportRepository)
     : INotificationHandler<BikeDeletedEvent>
 {
     public async Task Handle(BikeDeletedEvent notification, CancellationToken cancellationToken)
     {
-        await motorcycleReportRepository.DeleteAsync(notification.Id.ToString());
+        await bikeReportRepository.DeleteAsync(notification.Id.ToString());
     }
 }

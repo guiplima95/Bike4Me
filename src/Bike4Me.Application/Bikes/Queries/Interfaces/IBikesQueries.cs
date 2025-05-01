@@ -5,5 +5,5 @@ namespace Bike4Me.Application.Bikes.Queries.Interfaces;
 
 public interface IBikesQueries
 {
-    Task<Result<List<BikeResponse>>> FindAllByPlateAsync(string? plate);
+    Task<Result<List<BikeResponse>>> GetAllByPlateAsync(string? plate);
 }

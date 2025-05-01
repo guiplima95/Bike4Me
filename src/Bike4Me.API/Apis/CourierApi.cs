@@ -5,7 +5,7 @@ using Bike4Me.Application.Couriers.Commands;
 using Bike4Me.Application.Couriers.Dtos;
 using Bike4Me.Domain.Users;
 
-namespace Bike4Me.API.Apis.Public;
+namespace Bike4Me.API.Apis;
 
 public class CourierApi : IEndpoint
 {

@@ -15,6 +15,8 @@ public class BikeApi : IEndpoint
     {
         app.MapGet("bikes", FindBike)
             .RequireAuthorization(IdentityRoles.Admin)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces<List<BikeResponse>>(StatusCodes.Status200OK)
             .WithName("GetBikes")
             .WithDescription("Search for existing bikes")
@@ -22,15 +24,20 @@ public class BikeApi : IEndpoint
 
         app.MapPost("bikes", CreateBike)
             .RequireAuthorization(IdentityRoles.Admin)
-            .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status409Conflict)
+            .Produces(StatusCodes.Status201Created)
             .WithName("CreateBike")
             .WithDescription("Create a new bike")
             .WithTags(Tags.Bikes);
 
         app.MapPut("bikes/{id}/plate", UpdatePlate)
             .RequireAuthorization(IdentityRoles.Admin)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status409Conflict)
@@ -40,9 +47,10 @@ public class BikeApi : IEndpoint
 
         app.MapDelete("bikes/{id}", RemoveBike)
             .RequireAuthorization(IdentityRoles.Admin)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status400BadRequest)
             .WithName("DeleteBike")
             .WithDescription("Delete a bike")
             .WithTags(Tags.Bikes);
@@ -50,7 +58,7 @@ public class BikeApi : IEndpoint
 
     public static async Task<IResult> FindBike(IBikesQueries queries, string? plate = null)
     {
-        var result = Result.Success(await queries.FindAllByPlateAsync(plate));
+        var result = Result.Success(await queries.GetAllByPlateAsync(plate));
 
         return result.Match(Results.Ok, CustomResults.Problem);
     }

@@ -8,7 +8,7 @@ namespace Bike4Me.Application.Bikes.Queries;
 
 public sealed class BikesQueries(string connectionString) : IBikesQueries
 {
-    public async Task<Result<List<BikeResponse>>> FindAllByPlateAsync(string? licensePlate)
+    public async Task<Result<List<BikeResponse>>> GetAllByPlateAsync(string? licensePlate)
     {
         var query = """
         SELECT

@@ -4,5 +4,5 @@ namespace Bike4Me.Application.Bikes.Events;
 
 public sealed class BikeDeletedEvent(Guid id) : Event
 {
-    public Guid MotorcycleId => id;
+    public Guid Id => id;
 }

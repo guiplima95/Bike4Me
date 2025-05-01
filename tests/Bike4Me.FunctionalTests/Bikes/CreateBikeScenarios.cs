@@ -109,7 +109,7 @@ public class CreateBikeScenarios(FunctionalTestWebAppFactory<Program> factory) :
     {
         // Arrange
         CreateBikeCommand request = new(
-            "ABC1Q88", "blue", "250.2", "Honda", "CTX", 2020);
+            "ABC1S33", "blue", "250.2", "Honda", "CTX", 2020);
 
         using var client = CreateAuthenticatedClient(roles: [IdentityRoles.Admin]);
 
@@ -118,6 +118,8 @@ public class CreateBikeScenarios(FunctionalTestWebAppFactory<Program> factory) :
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        await WaitForEventBeingProcessed();
 
         var bikeInDb = await DbContext.Bikes.FirstOrDefaultAsync(b => b.Plate.Value == request.Plate);
         bikeInDb.Should().NotBeNull();

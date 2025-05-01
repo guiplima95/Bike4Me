@@ -6,6 +6,7 @@ namespace Bike4Me.Domain.Bikes;
 public class BikeReport
 {
     [BsonId]
+    [BsonRepresentation(BsonType.String)]
     public string? Id { get; set; }
 
     [BsonElement("licensePlate")]

@@ -89,4 +89,10 @@ public static class Post
 
 public static class Get
 {
+    public const string Bikes = "api/v1/bikes";
+}
+
+public static class Delete
+{
+    public static string Bike(Guid id) => $"api/v1/bikes/{id}";
 }

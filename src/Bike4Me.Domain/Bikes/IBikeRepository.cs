@@ -8,8 +8,6 @@ public interface IBikeRepository
 
     Task<bool> AnyExistsAsync(string plate);
 
-    Task<IEnumerable<Bike>> GetAllAsync();
-
     Task UpdateAsync(Bike bike);
 
     Task DeleteAsync(Bike bike);
