@@ -182,7 +182,7 @@ namespace Bike4Me.Infrastructure.Migrations
 
                     b.Property<Guid>("BikeId")
                         .HasColumnType("uuid")
-                        .HasColumnName("motorcycle_id");
+                        .HasColumnName("bike_id");
 
                     b.Property<Guid>("CourierId")
                         .HasColumnType("uuid")
@@ -299,7 +299,7 @@ namespace Bike4Me.Infrastructure.Migrations
 
             modelBuilder.Entity("Bike4Me.Domain.Bikes.Bike", b =>
                 {
-                    b.OwnsOne("Bike4Me.Domain.Bikes.LicensePlate", "LicensePlate", b1 =>
+                    b.OwnsOne("Bike4Me.Domain.Bikes.LicensePlate", "Plate", b1 =>
                         {
                             b1.Property<Guid>("BikeId")
                                 .HasColumnType("uuid")
@@ -324,7 +324,7 @@ namespace Bike4Me.Infrastructure.Migrations
                                 .HasConstraintName("fk_bikes_bikes_id");
                         });
 
-                    b.Navigation("LicensePlate")
+                    b.Navigation("Plate")
                         .IsRequired();
                 });
 

@@ -1,4 +1,6 @@
-﻿namespace Bike4Me.Application.Rentals.Dtos;
+﻿using Bike4Me.Domain.Rentals;
+
+namespace Bike4Me.Application.Rentals.Dtos;
 
 public record RentalResponse(
     Guid Id,
@@ -8,8 +10,8 @@ public record RentalResponse(
     DateTime RentalEndDate,
     DateTime ExpectedReturnDate,
     DateTime? ActualReturnDate,
-    string Status,
+    RentalStatus Status,
     decimal? TotalPrice)
 {
-    public RentalResponse() : this(Guid.Empty, Guid.Empty, Guid.Empty, default, default, default, null, string.Empty, null) { }
+    public RentalResponse() : this(Guid.Empty, Guid.Empty, Guid.Empty, default, default, default, null, RentalStatus.Active, null) { }
 }

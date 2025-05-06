@@ -6,5 +6,5 @@ public interface IRentalRepository
 
     Task UpdateAsync(Rental rental);
 
-    Task<Rental> GetAsync(Guid id);
+    Task<Rental?> GetAsync(Guid id);
 }

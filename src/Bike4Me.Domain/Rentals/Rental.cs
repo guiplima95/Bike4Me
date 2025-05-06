@@ -1,5 +1,4 @@
-﻿using Bike4Me.Domain.Bikes;
-using SharedKernel;
+﻿using SharedKernel;
 
 namespace Bike4Me.Domain.Rentals;
 
@@ -41,7 +40,7 @@ public class Rental : Entity
     public decimal? TotalPrice { get; private set; }
 
     public static Result<Rental> Create(
-        Guid motorcycleId,
+        Guid bikeId,
         Guid courierId,
         RentalPlan rentalPlan,
         DateTime rentalStartDate)
@@ -55,7 +54,7 @@ public class Rental : Entity
 
         var rental = new Rental(
             Guid.NewGuid(),
-            motorcycleId,
+            bikeId,
             courierId,
             rentalPlan,
             rentalStartDate,

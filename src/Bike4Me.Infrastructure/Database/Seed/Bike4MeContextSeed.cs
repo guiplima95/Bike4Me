@@ -31,7 +31,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
             await using var lockHandle = await AcquireLockAsync(lockProvider, logger);
             if (lockHandle is not null)
             {
-                await SeedDefaultMotorcycleAsync(context, logger, cancellationToken);
+                await SeedDefaultBikeAsync(context, logger, cancellationToken);
             }
         });
     }
@@ -54,7 +54,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
         return handle;
     }
 
-    private static async Task SeedDefaultMotorcycleAsync(
+    private static async Task SeedDefaultBikeAsync(
         Bike4MeContext context,
         ILogger logger,
         CancellationToken cancellationToken)
@@ -66,7 +66,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
         }
 
         var model = CreateDefaultMotorcycleModel();
-        var bike = CreateDefaultMotorcycle(model.Id);
+        var bike = CreateDefaultBike(model.Id);
 
         await context.BikeModels.AddAsync(model, cancellationToken);
         await context.Bikes.AddAsync(bike, cancellationToken);
@@ -83,7 +83,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
             new Year(2025),
             "293,5 cm³ Capacity Default");
 
-    private static Bike CreateDefaultMotorcycle(Guid modelId) =>
+    private static Bike CreateDefaultBike(Guid modelId) =>
         Bike.Create(
             Guid.NewGuid(),
             new LicensePlate("ABC-1234"),

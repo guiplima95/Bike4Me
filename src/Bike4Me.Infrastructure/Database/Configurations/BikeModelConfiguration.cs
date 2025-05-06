@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bike4Me.Infrastructure.Database.Configurations;
 
-public class MotorcycleModelConfiguration : IEntityTypeConfiguration<BikeModel>
+public class BikeModelConfiguration : IEntityTypeConfiguration<BikeModel>
 {
     public void Configure(EntityTypeBuilder<BikeModel> builder)
     {

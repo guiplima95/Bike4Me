@@ -84,6 +84,8 @@ public static class Post
     public const string Login = "api/v1/accounts/login";
     public const string Register = "api/v1/accounts/register";
 
+    public const string Rentals = "api/v1/rentals";
+
     public const string Bikes = "api/v1/bikes";
 }
 

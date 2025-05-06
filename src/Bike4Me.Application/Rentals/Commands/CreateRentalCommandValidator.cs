@@ -8,7 +8,7 @@ public class CreateRentalCommandValidator : AbstractValidator<CreateRentalComman
 
     public CreateRentalCommandValidator()
     {
-        RuleFor(x => x.MotorcycleId)
+        RuleFor(x => x.BikeId)
             .NotEmpty()
             .WithMessage("BikeId is required.");
 

@@ -1,76 +1,94 @@
-# Desafio backend Mottu.
-Seja muito bem-vindo ao desafio backend da Mottu, obrigado pelo interesse em fazer parte do nosso time e ajudar a melhorar a vida de milhares de pessoas.
 
-## Instruções
-- O desafio é válido para diversos níveis, portanto não se preocupe se não conseguir resolver por completo.
-- A aplicação só será avaliada se estiver rodando, se necessário crie um passo a passo para isso.
-- Faça um clone do repositório em seu git pessoal para iniciar o desenvolvimento e não cite nada relacionado a Mottu.
-- Após teste realizado, favor encaminha-lo via Link abaixo:
-Link: [Formulário - Mottu - Desafio Backend](https://forms.office.com/r/25yMPCax5S)
+# Bike4Me
 
-## Requisitos não funcionais 
-- A aplicação deverá ser construida com .Net utilizando C#.
-- Utilizar apenas os seguintes bancos de dados (Postgress, MongoDB)
-    - Não utilizar PL/pgSQL
-- Escolha o sistema de mensageria de sua preferencia( RabbitMq, Sqs/Sns , Kafka, Gooogle Pub/Sub ou qualquer outro)
+API para gestão de aluguel de motos e entregadores, desenvolvida como desafio técnico para vaga de backend. O projeto utiliza .NET 9, clean architecture e diversos padrões do ecossistema .NET.
 
-## Aplicação a ser desenvolvida
-Seu objetivo é criar uma aplicação para gerenciar aluguel de motos e entregadores. Quando um entregador estiver registrado e com uma locação ativa poderá também efetuar entregas de pedidos disponíveis na plataforma.
+---
 
-Iremos executar um teste de integração para validar os cenários de uso. Por isso, sua aplicação deve seguir exatamente as especificações de API`s Rest do nosso Swager: request, response e status code.
-Garanta que os atributos dos JSON`s e estão de acordo com o Swagger abaixo.
+## Como rodar o projeto
 
-Swagger de referência:
-https://app.swaggerhub.com/apis-docs/Mottu/mottu_desafio_backend/1.0.0
+O projeto utiliza Docker Compose para facilitar a configuração dos serviços necessários (banco de dados, RabbitMQ, Redis, etc).
 
-### Casos de uso
-- Eu como usuário admin quero cadastrar uma nova moto.
-  - Os dados obrigatórios da moto são Identificador, Ano, Modelo e Placa
-  - A placa é um dado único e não pode se repetir.
-  - Quando a moto for cadastrada a aplicação deverá gerar um evento de moto cadastrada
-    - A notificação deverá ser publicada por mensageria.
-    - Criar um consumidor para notificar quando o ano da moto for "2024"
-    - Assim que a mensagem for recebida, deverá ser armazenada no banco de dados para consulta futura.
-- Eu como usuário admin quero consultar as motos existentes na plataforma e conseguir filtrar pela placa.
-- Eu como usuário admin quero modificar uma moto alterando apenas sua placa que foi cadastrado indevidamente
-- Eu como usuário admin quero remover uma moto que foi cadastrado incorretamente, desde que não tenha registro de locações.
-- Eu como usuário entregador quero me cadastrar na plataforma para alugar motos.
-    - Os dados do entregador são( identificador, nome, cnpj, data de nascimento, número da CNHh, tipo da CNH, imagemCNH)
-    - Os tipos de cnh válidos são A, B ou ambas A+B.
-    - O cnpj é único e não pode se repetir.
-    - O número da CNH é único e não pode se repetir.
-- Eu como entregador quero enviar a foto de minha cnh para atualizar meu cadastro.
-    - O formato do arquivo deve ser png ou bmp.
-    - A foto não poderá ser armazenada no banco de dados, você pode utilizar um serviço de storage( disco local, amazon s3, minIO ou outros).
-- Eu como entregador quero alugar uma moto por um período.
-    - Os planos disponíveis para locação são:
-        - 7 dias com um custo de R$30,00 por dia
-        - 15 dias com um custo de R$28,00 por dia
-        - 30 dias com um custo de R$22,00 por dia
-        - 45 dias com um custo de R$20,00 por dia
-        - 50 dias com um custo de R$18,00 por dia
-    - A locação obrigatóriamente tem que ter uma data de inicio e uma data de término e outra data de previsão de término.
-    - O inicio da locação obrigatóriamente é o primeiro dia após a data de criação.
-    - Somente entregadores habilitados na categoria A podem efetuar uma locação
-- Eu como entregador quero informar a data que irei devolver a moto e consultar o valor total da locação.
-    - Quando a data informada for inferior a data prevista do término, será cobrado o valor das diárias e uma multa adicional
-        - Para plano de 7 dias o valor da multa é de 20% sobre o valor das diárias não efetivadas.
-        - Para plano de 15 dias o valor da multa é de 40% sobre o valor das diárias não efetivadas.
-    - Quando a data informada for superior a data prevista do término, será cobrado um valor adicional de R$50,00 por diária adicional.
-    
+1. **Pré-requisitos**  
+   - Docker e Docker Compose instalados
 
-## Diferenciais 🚀
-- Testes unitários
-- Testes de integração
-- EntityFramework e/ou Dapper
-- Docker e Docker Compose
-- Design Patterns
-- Documentação
-- Tratamento de erros
-- Arquitetura e modelagem de dados
-- Código escrito em língua inglesa
-- Código limpo e organizado
-- Logs bem estruturados
-- Seguir convenções utilizadas pela comunidade
-  
+2. **Suba os containers**  
+   ```bash
+   docker-compose up -d
+   ```
 
+3. **Acesse a API**  
+   - A aplicação estará disponível em: [http://localhost:5000](http://localhost:5000)
+   - O Swagger (documentação interativa) estará em: [http://localhost:5000/swagger](http://localhost:5000/swagger)
+
+---
+
+## Arquitetura do Projeto
+
+O projeto foi desenhado para demonstrar boas práticas de arquitetura, escalabilidade e manutenibilidade, utilizando conceitos modernos do desenvolvimento backend com .NET.
+
+### Principais características
+
+- **.NET 9**: Utiliza a última versão estável do .NET, aproveitando recursos de performance e minimal APIs.
+- **Minimal APIs**: Endpoints enxutos, com menos boilerplate, facilitando manutenção e leitura.
+- **CQRS (Command Query Responsibility Segregation)**:  
+  - **Commands**: Escritas e alterações de estado usando EF Core.
+  - **Queries**: Leitura otimizada usando Dapper para maior performance.
+- **Event Driven com RabbitMQ**:  
+  - Eventos importantes (ex: cadastro de moto) são publicados em filas RabbitMQ.
+  - A própria aplicação consome eventos da fila e persiste em um banco NoSQL (MongoDB), seguindo uma das regras do desafio.
+- **Versionamento de API**:  
+  - Suporte a múltiplas versões de API, facilitando evolução sem breaking changes.
+- **Swagger/OpenAPI**:  
+  - Documentação automática e interativa dos endpoints, seguindo o padrão OpenAPI.
+- **Autenticação JWT**:  
+  - Implementação simples de autenticação baseada em JWT com ASP.NET Core.
+- **Redis Output Cache**:  
+  - Cache de respostas para consultas de motos, melhorando performance e escalabilidade.
+- **Logger**:  
+  - Logging estruturado, principalmente em integrações e pontos críticos como integraçao com a fila.
+- **Seed e Migrations**:  
+  - Migrations automáticas via Fluent API e seed de dados no DbContext.
+- **Testes**:  
+  - Testes unitários, de integração e funcionais, utilizando Fluent Assertions e Result Pattern com Fluent Validation.
+  - Observação: Nem todas as classes possuem testes devido ao tempo do desafio, mas o projeto demonstra como testar as três camadas principais.
+- **DDD (Domain-Driven Design)**:  
+  - Separação clara entre Value Objects, Entities e Aggregates.
+  - Uso de Aggregates para garantir consistência transacional.
+  - **Rich Domain Model**:  
+    - Utilização do padrão Factory Method para criação de entidades, garantindo invariantes e encapsulando regras de negócio.
+- **Aggregator Pattern**:  
+  - Entidades agrupadas para garantir regras de consistência.
+- **Código limpo e organizado**:  
+  - Padrões de nomenclatura, separação de responsabilidades e uso de inglês no código.
+
+---
+
+## Como contribuir
+
+Sinta-se à vontade para abrir issues ou pull requests com sugestões de melhorias.
+
+---
+
+## Referências e artigos recomendados
+
+- [CQRS](https://martinfowler.com/bliki/CQRS.html)
+- [Minimal APIs no .NET](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis)
+- [Event Driven Architecture](https://microservices.io/patterns/data/event-driven-architecture.html)
+- [Factory Method Pattern](https://refactoring.guru/pt-br/design-patterns/factory-method)
+- [Fluent Validation](https://fluentvalidation.net/)
+- [Testing in .NET](https://learn.microsoft.com/dotnet/core/testing/)
+- [OpenAPI/Swagger](https://swagger.io/specification/)
+- [Redis Output Caching](https://learn.microsoft.com/aspnet/core/performance/caching/response)
+- [RabbitMQ com .NET](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html)
+
+---
+
+## Observações
+
+- O projeto foi desenvolvido em tempo limitado, priorizando demonstrar arquitetura, padrões e boas práticas.
+- Algumas classes não possuem testes, mas o projeto cobre exemplos de testes unitários, de integração e funcionais.
+- O domínio foi modelado de forma rica, utilizando padrões de DDD e Factory Method para garantir invariantes.
+
+
+---

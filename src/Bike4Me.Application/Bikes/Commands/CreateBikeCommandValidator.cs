@@ -13,36 +13,36 @@ public sealed class CreateBikeCommandValidator : AbstractValidator<CreateBikeCom
             .NotEmpty().WithMessage("LicensePlate is required.")
             .Matches(PlateRegex).WithMessage("LicensePlate must follow the old format (ABC-1234) or Mercosul format (ABC1D23).")
             .MaximumLength(8)
-            .WithErrorCode("CreateMotorcycle.InvalidPlateLength");
+            .WithErrorCode("CreateBike.InvalidPlateLength");
 
         RuleFor(c => c.Color)
             .NotEmpty()
-            .WithErrorCode("CreateMotorcycle.MissingColor")
+            .WithErrorCode("CreateBike.MissingColor")
             .MaximumLength(30)
-            .WithErrorCode("CreateMotorcycle.InvalidColorLength");
+            .WithErrorCode("CreateBikeCreateBike.InvalidColorLength");
 
         RuleFor(c => c.ModelName)
             .NotEmpty()
-            .WithErrorCode("CreateMotorcycle.MissingModelName")
+            .WithErrorCode("CreateBike.MissingModelName")
             .MaximumLength(50)
-            .WithErrorCode("CreateMotorcycle.InvalidModelNameLength");
+            .WithErrorCode("CreateBike.InvalidModelNameLength");
 
         RuleFor(c => c.ModelManufacturer)
             .NotEmpty()
-            .WithErrorCode("CreateMotorcycle.MissingModelManufacturer")
+            .WithErrorCode("CreateBike.MissingModelManufacturer")
             .MaximumLength(50)
-            .WithErrorCode("CreateMotorcycle.InvalidModelManufacturerLength");
+            .WithErrorCode("CreateBike.InvalidModelManufacturerLength");
 
         RuleFor(c => c.ModelYear)
             .NotNull()
-            .WithErrorCode("CreateMotorcycle.MissingModelYear")
+            .WithErrorCode("CreateBike.MissingModelYear")
             .InclusiveBetween(1900, DateTime.Now.Year)
-            .WithErrorCode("CreateMotorcycle.InvalidModelYear");
+            .WithErrorCode("CreateBike.InvalidModelYear");
 
         RuleFor(c => c.ModelEngineCapacity)
             .NotEmpty()
-            .WithErrorCode("CreateMotorcycle.MissingModelEngineCapacity")
+            .WithErrorCode("CreateBike.MissingModelEngineCapacity")
             .MaximumLength(20)
-            .WithErrorCode("CreateMotorcycle.InvalidModelEngineCapacityLength");
+            .WithErrorCode("CreateBike.InvalidModelEngineCapacityLength");
     }
 }

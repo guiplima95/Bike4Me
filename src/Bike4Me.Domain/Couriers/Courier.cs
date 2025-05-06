@@ -1,6 +1,5 @@
 ﻿using Bike4Me.Domain.Users;
 using SharedKernel;
-using System.Text.RegularExpressions;
 
 namespace Bike4Me.Domain.Couriers;
 

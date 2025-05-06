@@ -16,7 +16,7 @@ public sealed class CreateRentalCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
-        Bike? bike = await bikeRepository.GetAsync(request.MotorcycleId);
+        Bike? bike = await bikeRepository.GetAsync(request.BikeId);
         if (bike is null)
         {
             return Result.Failure<Guid>(BikeErrors.NotFound);
@@ -64,7 +64,7 @@ public sealed class CreateRentalCommandHandler(
         }
 
         var rentalResult = Rental.Create(
-            request.MotorcycleId,
+            request.BikeId,
             request.CourierId,
             rentalPlan,
             request.RentalStartDate);

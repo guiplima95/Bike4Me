@@ -11,7 +11,7 @@ public sealed class UpdateBikePlateCommandValidator : AbstractValidator<UpdateBi
     {
         RuleFor(c => c.Id)
             .NotEmpty()
-            .WithErrorCode("UpdateMotorcyclePlate.MissingMotorcycleId");
+            .WithErrorCode("UpdateMotorcyclePlate.MissingBikeId");
 
         RuleFor(c => c.LicensePlate)
             .NotEmpty()

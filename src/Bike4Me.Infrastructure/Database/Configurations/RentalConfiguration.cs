@@ -14,7 +14,7 @@ public class RentalConfiguration : IEntityTypeConfiguration<Rental>
 
         builder.Property(r => r.BikeId)
             .IsRequired()
-            .HasColumnName("motorcycle_id");
+            .HasColumnName("bike_id");
 
         builder.Property(r => r.CourierId)
             .IsRequired()

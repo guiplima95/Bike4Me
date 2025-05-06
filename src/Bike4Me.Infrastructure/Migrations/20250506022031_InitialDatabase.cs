@@ -75,7 +75,7 @@ namespace Bike4Me.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    motorcycle_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    bike_id = table.Column<Guid>(type: "uuid", nullable: false),
                     courier_id = table.Column<Guid>(type: "uuid", nullable: false),
                     rental_start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     rental_end_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -101,6 +101,7 @@ namespace Bike4Me.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false),
                     role = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
