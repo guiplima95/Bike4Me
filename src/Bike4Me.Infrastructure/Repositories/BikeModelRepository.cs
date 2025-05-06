@@ -10,21 +10,19 @@ public class BikeModelRepository(Bike4MeContext context) : IBikeModelRepository
         Name name,
         Manufacturer manufacturer,
         Year year,
-        string engineCapacity,
-        CancellationToken cancellationToken = default)
+        string engineCapacity)
     {
         return await context.BikeModels
             .FirstOrDefaultAsync(m =>
                 m.Name == name &&
                 m.Manufacturer == manufacturer &&
                 m.Year == year &&
-                m.EngineCapacity == engineCapacity,
-                cancellationToken);
+                m.EngineCapacity == engineCapacity);
     }
 
-    public async Task AddAsync(BikeModel model, CancellationToken cancellationToken = default)
+    public async Task AddAsync(BikeModel model)
     {
-        await context.BikeModels.AddAsync(model, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        await context.BikeModels.AddAsync(model);
+        await context.SaveChangesAsync();
     }
 }

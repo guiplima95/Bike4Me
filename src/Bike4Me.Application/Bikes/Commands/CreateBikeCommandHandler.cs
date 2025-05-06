@@ -59,8 +59,7 @@ public sealed class CreateBikeCommandHandler(
             modelName,
             manufacturer,
             year,
-            modelEngineCapacity,
-            cancellationToken);
+            modelEngineCapacity);
 
         if (existingModel is null)
         {
@@ -71,7 +70,7 @@ public sealed class CreateBikeCommandHandler(
                  year,
                  modelEngineCapacity);
 
-            await bikeModelRepository.AddAsync(model, cancellationToken);
+            await bikeModelRepository.AddAsync(model);
             return model;
         }
 

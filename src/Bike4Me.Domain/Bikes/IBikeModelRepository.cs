@@ -6,8 +6,7 @@ public interface IBikeModelRepository
         Name name,
         Manufacturer manufacturer,
         Year year,
-        string engineCapacity,
-        CancellationToken cancellationToken = default);
+        string engineCapacity);
 
-    Task AddAsync(BikeModel model, CancellationToken cancellationToken = default);
+    Task AddAsync(BikeModel model);
 }
