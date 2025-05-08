@@ -24,9 +24,10 @@ public class RegisterUserCommandHandler(
         }
 
         User user = User.Create(
+           Guid.NewGuid(),
            emailResult.Value,
            new Name(request.Name),
-           UserRole.Client);
+           request.IsAdmin ? UserRole.Admin : UserRole.Client);
 
         var hashedPassword = passwordHasher.Hash(user, request.Password);
 

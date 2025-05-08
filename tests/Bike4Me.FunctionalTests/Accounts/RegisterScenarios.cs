@@ -66,6 +66,7 @@ public class RegisterScenarios(FunctionalTestWebAppFactory<Program> factory) : B
         var email = Faker.Internet.Email();
 
         var existingUser = User.Create(
+            Guid.NewGuid(),
             Email.Create(email).Value,
             new Name(Faker.Name.FullName()),
             UserRole.Client);

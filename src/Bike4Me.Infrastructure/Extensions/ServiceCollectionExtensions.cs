@@ -1,5 +1,4 @@
 ﻿using Azure.Storage.Blobs;
-using Bike4Me.Application.Abstractions.Caching;
 using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Abstractions.Security;
 using Bike4Me.Application.Abstractions.Storage;
@@ -7,7 +6,6 @@ using Bike4Me.Domain.Bikes;
 using Bike4Me.Domain.Couriers;
 using Bike4Me.Domain.Rentals;
 using Bike4Me.Domain.Users;
-using Bike4Me.Infrastructure.Caching;
 using Bike4Me.Infrastructure.Database;
 using Bike4Me.Infrastructure.EventBus;
 using Bike4Me.Infrastructure.EventBus.Interfaces;
@@ -15,6 +13,8 @@ using Bike4Me.Infrastructure.NoSql;
 using Bike4Me.Infrastructure.Repositories;
 using Bike4Me.Infrastructure.Security;
 using Bike4Me.Infrastructure.Storage;
+using Medallion.Threading;
+using Medallion.Threading.Postgres;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         AddDbContext(services, configuration);
-        AddCache(services, configuration);
+        AddDistributedLockPostgres(services, configuration);
         AddHealthChecks(services, configuration);
         AddBlobStorage(services, configuration);
         AddRabbitMQ(services, configuration);
@@ -51,18 +51,6 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<Bike4MeContext>(options =>
             options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
-    }
-
-    private static void AddCache(IServiceCollection services, IConfiguration configuration)
-    {
-        string redisConnectionString = configuration.GetConnectionString("Cache")!;
-
-        Ensure.NotNullOrEmpty(redisConnectionString);
-
-        services.AddStackExchangeRedisCache(options =>
-            options.Configuration = redisConnectionString);
-
-        services.AddSingleton<ICacheService, CacheService>();
     }
 
     private static void AddSecurity(IServiceCollection services, IConfiguration configuration)
@@ -141,5 +129,14 @@ public static class ServiceCollectionExtensions
             var database = sp.GetRequiredService<IMongoDatabase>();
             return database.GetCollection<Bike>("bikes");
         });
+    }
+
+    public static IServiceCollection AddDistributedLockPostgres(this IServiceCollection services, IConfiguration configuration)
+    {
+        string connectionString = configuration["ConnectionStrings:DefaultConnection"]
+            ?? throw new InvalidOperationException("Not found postgres connection string");
+
+        return services
+            .AddSingleton<IDistributedLockProvider>(_ => new PostgresDistributedSynchronizationProvider(connectionString));
     }
 }

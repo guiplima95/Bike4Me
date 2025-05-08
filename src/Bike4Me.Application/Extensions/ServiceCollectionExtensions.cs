@@ -1,15 +1,13 @@
 ﻿using Bike4Me.Application.Abstractions.Behaviors;
-using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Abstractions.Messaging;
+using Bike4Me.Application.Abstractions.Messaging.Interfaces;
 using Bike4Me.Application.Bikes.Queries;
 using Bike4Me.Application.Bikes.Queries.Interfaces;
+using Bike4Me.Application.Rentals.Queries;
+using Bike4Me.Application.Rentals.Queries.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Bike4Me.Application.Rentals.Queries.Interfaces;
-using Bike4Me.Application.Rentals.Queries;
-using Bike4Me.Application.Abstractions.Security;
-using Bike4Me.Domain.Users;
 
 namespace Bike4Me.Application.Extensions;
 

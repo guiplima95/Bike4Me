@@ -45,9 +45,9 @@ public class User : Entity
         PasswordHash = hashedPassword;
     }
 
-    public static User Create(Email email, Name name, UserRole? role)
+    public static User Create(Guid id, Email email, Name name, UserRole? role)
     {
-        var user = new User(Guid.NewGuid(), email, name, role);
+        var user = new User(id, email, name, role);
 
         return user;
     }

@@ -8,6 +8,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=5001
 
       - ConnectionStrings__DefaultConnection=Host=bike4me.db;Database=bike4me-db;Username=postgres;Password=postgres
+      - ConnectionStrings__Cache=bike4me.redis:6379
       - MongoDbSettings__ConnectionString=mongodb://root:example@bike4me.mongo:27017/bike4me-db
 
       - BlobStorage__ConnectionString=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://bike4me-blob-storage:10000/

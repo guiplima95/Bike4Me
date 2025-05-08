@@ -5,10 +5,13 @@ using Bike4Me.API.Configurations;
 using Bike4Me.API.Extensions;
 using Bike4Me.API.Infrastructure;
 using Bike4Me.API.OpenApi;
+using Bike4Me.API.OutputCaching;
 using Bike4Me.Application.Extensions;
+using Bike4Me.Infrastructure.Database.Seed;
 using Bike4Me.Infrastructure.Extensions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.OutputCaching;
 using Serilog;
 using System.Reflection;
 
@@ -71,10 +74,45 @@ builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+builder.Services.AddStackExchangeRedisOutputCache(o =>
+{
+    o.Configuration = builder.Configuration.GetConnectionString("Cache");
+    o.InstanceName = "bike4me-";
+});
+
+builder.Services.AddOutputCache(o =>
+{
+    o.AddPolicy("CustomPerUser", b => b
+        .AddPolicy<CustomPolicy>()
+        .SetCacheKeyPrefix("custom-")
+        .Tag("all")
+        .Expire(TimeSpan.FromMinutes(10))
+        .VaryByValue((ctx, _) =>
+        {
+            var key = nameof(ClaimsPrincipalExtensions.UserId);
+            var val = ctx.User.UserId().ToString();
+            return ValueTask.FromResult(new KeyValuePair<string, string>(key, val));
+        })
+    );
+});
+
 WebApplication app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseOutputCache();
+
+app.Use(async (ctx, next) =>
+{
+    await next();
+
+    var feat = ctx.Features.Get<IOutputCacheFeature>();
+
+    Console.WriteLine($"[CACHE-TRACE] Path={ctx.Request.Path}  " +
+                      $"HasStarted={ctx.Response.HasStarted}  " +
+                      $"AllowCacheStorage={feat?.Context.AllowCacheStorage}");
+});
 
 ApiVersionSet apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(new ApiVersion(1))
@@ -104,7 +142,7 @@ if (app.Environment.IsDevelopment())
     });
 
     app.ApplyMigrations();
-    //await app.SeedDatabaseAsync(new Bike4MeContextSeed());
+    await app.SeedDatabaseAsync(new Bike4MeContextSeed());
 }
 
 app.UseHttpsRedirection();
@@ -121,6 +159,7 @@ app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
 await app.ConfigureEventBus();
+
 await app.RunAsync();
 
 public partial class Program;

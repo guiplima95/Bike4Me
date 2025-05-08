@@ -5,6 +5,7 @@ using Bike4Me.Application.Bikes.Commands;
 using Bike4Me.Application.Bikes.Dtos;
 using Bike4Me.Application.Bikes.Queries.Interfaces;
 using Bike4Me.Domain.Users;
+using Microsoft.Extensions.DependencyInjection;
 using SharedKernel;
 
 namespace Bike4Me.API.Apis;
@@ -20,7 +21,8 @@ public class BikeApi : IEndpoint
             .Produces<List<BikeResponse>>(StatusCodes.Status200OK)
             .WithName("GetBikes")
             .WithDescription("Search for existing bikes")
-            .WithTags(Tags.Bikes);
+            .WithTags(Tags.Bikes)
+            .CacheOutput("CustomPerUser");
 
         app.MapPost("bikes", CreateBike)
             .RequireAuthorization(IdentityRoles.Admin)

@@ -21,10 +21,10 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken = default)
     {
-        var logger = serviceProvider.GetRequiredService<ILogger<Bike4MeContextSeed>>();
-        var lockProvider = serviceProvider.GetRequiredService<IDistributedLockProvider>();
+        ILogger<Bike4MeContextSeed> logger = serviceProvider.GetRequiredService<ILogger<Bike4MeContextSeed>>();
+        IDistributedLockProvider lockProvider = serviceProvider.GetRequiredService<IDistributedLockProvider>();
 
-        var policy = CreateRetryPolicy(logger);
+        AsyncRetryPolicy policy = CreateRetryPolicy(logger);
 
         await policy.ExecuteAsync(async () =>
         {
@@ -65,7 +65,7 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
             return;
         }
 
-        var model = CreateDefaultMotorcycleModel();
+        var model = CreateDefaultBikeModel();
         var bike = CreateDefaultBike(model.Id);
 
         await context.BikeModels.AddAsync(model, cancellationToken);
@@ -75,10 +75,10 @@ public class Bike4MeContextSeed : IDbContextSeed<Bike4MeContext>
         logger.LogInformation("Successfully seeded default bike");
     }
 
-    private static BikeModel CreateDefaultMotorcycleModel() =>
+    private static BikeModel CreateDefaultBikeModel() =>
         BikeModel.Create(
             _defaultModelId,
-            new Name("CB 300F Twister Default Model"),
+            new Domain.Bikes.Name("CB 300F Twister Default Model"),
             new Manufacturer("Honda Default"),
             new Year(2025),
             "293,5 cm³ Capacity Default");

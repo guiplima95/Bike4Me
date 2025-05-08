@@ -18,6 +18,7 @@ public class LoginScenarios(FunctionalTestWebAppFactory<Program> factory) : Base
         var password = "Password123!";
 
         var user = User.Create(
+            Guid.NewGuid(),
             Email.Create(email).Value,
             new Name(Faker.Name.FullName()),
             UserRole.Client);
